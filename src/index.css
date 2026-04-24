@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-primary: #1B8F4D;
+  --color-brand-secondary: #0B4D2C;
+  --color-neutral-warm: #F9FAF7;
+  --color-neutral-border: #E8EEE8;
+  
+  --font-serif: "Playfair Display", "DM Serif Display", serif;
+  --font-sans: "Inter", "Outfit", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply font-sans bg-neutral-warm text-[#1A2E1A] antialiased min-h-screen;
+    background-image: 
+      radial-gradient(circle at 100% 0%, rgba(27, 143, 77, 0.03) 0%, transparent 40%),
+      radial-gradient(circle at 0% 100%, rgba(139, 92, 246, 0.02) 0%, transparent 40%);
+  }
+
+  h1, h2, h3, h4, .font-serif {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-brand-primary hover:bg-brand-secondary text-white px-6 py-2.5 rounded-full transition-all shadow-sm hover:shadow active:scale-95 disabled:opacity-50 font-bold text-sm tracking-wide;
+  }
+  
+  .organic-card {
+    @apply bg-white rounded-[2rem] border border-neutral-border shadow-sm hover:shadow-md transition-all duration-300;
+  }
+
+  .hero-gradient {
+    @apply bg-linear-to-br from-[#1B8F4D] via-[#2D6A4F] to-[#081C15];
+  }
+
+  .ai-panel {
+    @apply bg-[#FCFDFB] border-l border-neutral-border shadow-[-10px_0_30px_rgba(0,0,0,0.02)];
+  }
+}
