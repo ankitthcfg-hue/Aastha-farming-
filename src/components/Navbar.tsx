@@ -5,7 +5,7 @@ import { useCart } from '../context/CartContext';
 import { motion, AnimatePresence } from 'motion/react';
 
 const Navbar = () => {
-    const { cart } = useCart();
+    const { cart, total } = useCart();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const location = useLocation();
 
@@ -15,7 +15,8 @@ const Navbar = () => {
         { name: 'Kisan Store', path: '/' },
         { name: 'Seeds', path: '/store?category=Seeds' },
         { name: 'Fertilizers', path: '/store?category=Fertilizers' },
-        { name: 'Tools', path: '/store?category=Tools' },
+        { name: 'Agri Advisory', path: '/agri-hub' },
+        { name: 'My Orders', path: '/orders' },
     ];
 
     return (
