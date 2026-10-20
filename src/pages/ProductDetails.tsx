@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
     ChevronLeft, Star, ShoppingCart, ShieldCheck, 
     Truck, RefreshCw, Minus, Plus, Share2, Heart,
-    Sprout, Info, MessageSquare
+    Sprout, Info, MessageSquare, Zap
 } from 'lucide-react';
 import { MOCK_PRODUCTS } from '../constants';
 import { Product } from '../lib/supabase';
