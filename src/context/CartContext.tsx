@@ -8,6 +8,11 @@ interface CartContextType {
     updateQuantity: (itemId: string, quantity: number) => Promise<void>;
     clearCart: () => void;
     total: number;
+    user: any;
+    loginWithGoogle: () => Promise<void>;
+    loginWithEmail: (e: string, p: string) => Promise<void>;
+    signUpWithEmail: (e: string, p: string) => Promise<void>;
+    logout: () => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -28,7 +33,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (user) {
             fetchCart();
         } else {
-            // Load local cart for guest or handled by Supabase persistence
             const localCart = localStorage.getItem('guest_cart');
             if (localCart) setCart(JSON.parse(localCart));
         }
@@ -46,6 +50,39 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
+    const loginWithGoogle = async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: window.location.origin,
+            },
+        });
+        if (error) throw error;
+    };
+
+    const loginWithEmail = async (email: string, pass: string) => {
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password: pass,
+        });
+        if (error) throw error;
+    };
+
+    const signUpWithEmail = async (email: string, pass: string) => {
+        const { error } = await supabase.auth.signUp({
+            email,
+            password: pass,
+        });
+        if (error) throw error;
+    };
+
+    const logout = async () => {
+        await supabase.auth.signOut();
+        setUser(null);
+        setCart([]);
+        localStorage.removeItem('guest_cart');
+    };
+
     const addToCart = async (product: Product, quantity: number = 1) => {
         if (user) {
             const existing = cart.find(item => item.product_id === product.id);
@@ -60,7 +97,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 if (!error && data) setCart([...cart, data]);
             }
         } else {
-            // Local storage for guests
             const newCart = [...cart];
             const existing = newCart.find(item => item.product_id === product.id);
             if (existing) {
@@ -107,7 +143,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const total = cart.reduce((sum, item) => sum + (item.product?.price || 0) * item.quantity, 0);
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart, total }}>
+        <CartContext.Provider value={{
+            cart, addToCart, removeFromCart, updateQuantity, clearCart, total,
+            user, loginWithGoogle, loginWithEmail, signUpWithEmail, logout
+        }}>
             {children}
         </CartContext.Provider>
     );
